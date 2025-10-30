@@ -1,28 +1,20 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoggerMiddleware } from './logger/logger.middleware';
-import { UsersService } from './users/users.service';
+import { typeOrmConfig } from './config/typeorm.config';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { RolesModule } from './roles/roles.module';
+import { TerminalsModule } from './terminals/terminals.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mssql',
-      host: '192.168.100.35',
-      port: 1433,
-      username: 'RouteIQUser',
-      password: 'password123',
-      database: 'routeIQ_2025',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      options: { encrypt: false, trustServerCertificate: true },
-    }),
+    ConfigModule.forRoot({ isGlobal: true , envFilePath: ['.env']}),
+    TypeOrmModule.forRoot(typeOrmConfig),
+    AuthModule,
     UsersModule,
+    RolesModule,
+    TerminalsModule
   ],
-  providers: [UsersService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*'); 
-  }
-}
+export class AppModule {}
