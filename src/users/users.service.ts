@@ -8,7 +8,7 @@ import { UserTerminal } from 'src/entities/user-terminal.entity';
 import { Role } from 'src/entities/role.entity';
 import { Terminal } from 'src/entities/terminal.entity';
 import { CreateUserDto, ControlLevel } from './dtos/create-user.dto';
-
+ 
 @Injectable()
 export class UsersService {
   constructor(
