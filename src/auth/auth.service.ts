@@ -9,8 +9,10 @@ export class AuthService {
 
   async validate(username: string, password: string) {
     const user = await this.users.findByUsernameWithRelations(username);
+    console.log('Found user:', user); 
     if (!user) throw new UnauthorizedException('Invalid credentials');
     const ok = await bcrypt.compare(password, user.passwordHash);
+    console.log('Password match:', ok);
     if (!ok) throw new UnauthorizedException('Invalid credentials');
     return user;
   }
